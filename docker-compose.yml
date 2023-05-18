@@ -69,21 +69,36 @@ services:
     networks:
       - enroute_network
     container_name: celery
+    
+  certbot:
+  image: certbot/certbot
+  restart: unless-stopped
+  command: certonly --webroot -w /home/ubuntu/Enroute-Backend-Only-AWS -d admin.enroutetravel.co.in
+  volumes:
+    - /home/ubuntu/Enroute-Backend-Only-AWS:/home/ubuntu/Enroute-Backend-Only-AWS
+  networks: 
+    - enroute_network
+  container_name: certbot
 
-  nginx:
-    image: nginx
-    restart: always
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
-      - ./backend/static:/usr/share/nginx/html/backend/static
-      - ./backend/media:/usr/share/nginx/html/backend/media
-    depends_on:
-      - backend
-    networks:
-      - enroute_network
-    container_name: nginx
+
+nginx:
+  image: nginx
+  restart: always
+  ports:
+    - 80:80
+    - 443:443  # Expose port 443 for SSL
+  volumes:
+    - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
+    - ./backend/static:/usr/share/nginx/html/backend/static
+    - ./backend/media:/usr/share/nginx/html/backend/media
+    - certbot_certs:/etc/letsencrypt  # Mount the Certbot certificates directory
+  depends_on:
+    - backend
+    - certbot  # Ensure Certbot runs before Nginx
+  networks:
+    - enroute_network
+  container_name: nginx
+
 
 networks:
   enroute_network:
