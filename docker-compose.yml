@@ -75,14 +75,29 @@ services:
     restart: always
     ports:
       - 80:80
+      - 443:443  # Add the port mapping for SSL
     volumes:
-      - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d  # Mount the Nginx configuration directory
       - ./backend/static:/usr/share/nginx/html/backend/static
+      - ./certbot/conf:/etc/letsencrypt  # Mount the Certbot configuration directory
+      - ./certbot/www:/var/www/html  # Mount the Certbot web root directory
     depends_on:
       - backend
     networks:
       - enroute_network
     container_name: nginx
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt  # Mount the Certbot configuration directory
+      - ./certbot/www:/var/www/html  # Mount the Certbot web root directory
+    command: certonly --webroot --webroot-path=/var/www/html --email your_email@example.com --agree-tos --no-eff-email --staging -d admin.enroutetravel.co.in  # Replace staging with --no-staging when testing is done
+    depends_on:
+      - nginx
+    networks:
+      - enroute_network
 
 networks:
   enroute_network:
