@@ -73,12 +73,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
    
 ]
-CORS_ALLOWED_ORIGINS = [    "http://localhost:3000",    "https://api.razorpay.com",'https://3303-2409-4073-4e82-a4d-ffc5-2f4f-9c65-eae3.ngrok-free.app']
+CORS_ALLOWED_ORIGINS = [    "http://localhost:3000",    "https://api.razorpay.com",'https://admin.enroutetravel.co.in']
 
-CSRF_TRUSTED_ORIGINS = [    "http://localhost:3000",    "https://api.razorpay.com" ,'https://3303-2409-4073-4e82-a4d-ffc5-2f4f-9c65-eae3.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = [    "http://localhost:3000",    "https://api.razorpay.com" ,'https://admin.enroutetravel.co.in']
 
 
-CORS_ORIGIN_WHITELIST = [    'http://localhost:3000',    'https://api.razorpay.com','https://3303-2409-4073-4e82-a4d-ffc5-2f4f-9c65-eae3.ngrok-free.app']
+CORS_ORIGIN_WHITELIST = [    'http://localhost:3000',    'https://api.razorpay.com','https://admin.enroutetravel.co.in']
 
 OAUTH2_PROVIDER = {
     'SCOPES': {
