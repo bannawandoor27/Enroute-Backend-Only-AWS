@@ -95,7 +95,8 @@ services:
       - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf:ro
       - certbot_certs:/etc/letsencrypt
       - /home/ubuntu/Enroute-Backend-Only-AWS:/home/ubuntu/Enroute-Backend-Only-AWS 
-    command: certonly --webroot --webroot-path=/home/ubuntu/Enroute-Backend-Only-AWS -d admin.enroutetravel.co.in
+    command: certbot certonly --webroot --webroot-path=/home/ubuntu/Enroute-Backend-Only-AWS -d admin.enroutetravel.co.in --non-interactive --agree-tos
+
     networks:
       - enroute_network
     container_name: certbot
