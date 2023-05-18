@@ -94,7 +94,7 @@ services:
     volumes:
       - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf:ro
       - certbot_certs:/etc/letsencrypt
-    command: certonly --webroot --webroot-path=/path/to/your/website/root -d admin.enroutetravel.co.in
+    command: certonly --webroot --webroot-path=//home/ubuntu/Enroute-Backend-Only-AWS -d admin.enroutetravel.co.in
     networks:
       - enroute_network
     container_name: certbot
