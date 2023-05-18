@@ -42,9 +42,7 @@ class PackageImageSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, obj):
         request = self.context.get('request')
-        absolute_url = request.build_absolute_uri(obj.image.url)
-        absolute_url = absolute_url.replace('http://', 'https://')
-        return absolute_url
+        return request.build_absolute_uri(obj.image.url)
 
 class PackageSerializer(serializers.ModelSerializer):
     images = PackageImageSerializer(many=True,read_only=True,)
