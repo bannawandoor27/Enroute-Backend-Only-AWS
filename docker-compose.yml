@@ -1,0 +1,93 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=banna
+      - POSTGRES_DB=enroute
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - enroute_network
+    container_name: postgres
+    
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - enroute_network
+    container_name: redis
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    command: gunicorn enroute.wsgi:application --bind 0.0.0.0:8000 --workers 4 
+
+    ports:
+      - 8000:8000
+    links:
+      - db:db
+      - redis:redis
+    volumes:
+      - ./backend:/api
+    depends_on:
+      - db
+      - redis
+    container_name: backend
+    environment:
+      DATABASE_URL: postgres://postgres:banna@db:5432/enroute
+      REDIS_URL: redis://redis:6379/0
+    networks:
+      - enroute_network
+
+  celery:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    command: celery -A enroute worker -l info
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./backend:/api
+    environment:
+      DATABASE_URL: postgres://postgres:banna@db:5432/enroute
+      REDIS_URL: redis://redis:6379/0
+    networks:
+      - enroute_network
+    container_name: celery
+
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
+      - ./backend/static:/usr/share/nginx/html/backend/static
+    depends_on:
+      - backend
+    networks:
+      - enroute_network
+    container_name: nginx
+
+networks:
+  enroute_network:
+    driver: bridge
+    
+volumes:
+  postgres_data:
+  redis_data:

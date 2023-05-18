@@ -1,0 +1,8 @@
+env
+enroute/.env
+media
+
+
+**/__pycache__/
+**/migrations/
+users/__pycache__/admin.cpython-311.pyc
