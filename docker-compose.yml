@@ -70,21 +70,22 @@ services:
       - enroute_network
     container_name: celery
   
+nginx-ssl:
+  image: nginx
+  restart: always
+  ports:
+    - 443:443
+  volumes:
+    - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
+    - ./backend/static:/usr/share/nginx/html/backend/static
+    - ./backend/media:/usr/share/nginx/html/backend/media
+    - ./ssl:/etc/nginx/ssl
+  depends_on:
+    - backend
+  networks:
+    - enroute_network
+  container_name: nginx-ssl
 
-  nginx:
-    image: nginx
-    restart: always
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
-      - ./backend/static:/usr/share/nginx/html/backend/static
-      - ./backend/media:/usr/share/nginx/html/backend/media
-    depends_on:
-      - backend
-    networks:
-      - enroute_network
-    container_name: nginx
 
 networks:
   enroute_network:
