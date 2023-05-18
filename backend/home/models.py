@@ -6,3 +6,5 @@ class Video(models.Model):
     thumbnail = models.ImageField(upload_to='thumbnails/')
     def __str__(self):
         return self.title
+    
+    

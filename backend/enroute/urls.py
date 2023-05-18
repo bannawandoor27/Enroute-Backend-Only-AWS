@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/experience/',include('experience.urls')),
     path('', include('admin_material.urls')),
     
+    
 ]+static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

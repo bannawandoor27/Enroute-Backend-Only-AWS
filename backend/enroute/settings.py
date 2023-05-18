@@ -173,7 +173,7 @@ ACCESS_TOKEN_EXPIRE_SECONDS = 94630400
 USE_I18N = True
 
 USE_TZ = True
-API_BASE_URL = 'http://localhost:8000/media/'
+API_BASE_URL = 'https://admin.enroutetravel.co.in/media/'
 AUTH_USER_MODEL='users.Account'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
