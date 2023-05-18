@@ -69,15 +69,16 @@ services:
     networks:
       - enroute_network
     container_name: celery
-  
 
   nginx:
     image: nginx
     restart: always
     ports:
       - 80:80
+      - 443:443
     volumes:
-      - ./nginx/conf.d/enroute.conf:/etc/nginx/conf.d/enroute.conf
+      - ./certbot:/var/www/certbot
+      - ./nginx/conf.d/enroute.conf:/etc/nginx/nginx.conf
       - ./backend/static:/usr/share/nginx/html/backend/static
       - ./backend/media:/usr/share/nginx/html/backend/media
     depends_on:
